@@ -7,6 +7,7 @@ import {
   Trophy,
 } from "lucide-react";
 import {useEffect, useState} from "react";
+import { CASE_STUDIES } from "../data/projects";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -278,7 +279,7 @@ function Portfolio() {
       <About />
       <Stack />
       <Experience />
-      <Projects />
+      <ProjectHighlights />
       {/* <Architecture />
       <AIShowcase /> */}
       <Skills />
@@ -334,7 +335,7 @@ function Hero() {
 
 <div className="mt-10 flex flex-wrap gap-3 float-in">
   <a
-    href="#projects"
+    href="/projects"
     className="group inline-flex items-center gap-2 px-5 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:opacity-90 transition"
   >
     View Projects
@@ -507,22 +508,119 @@ function Experience() {
   );
 }
 
+function ProjectHighlights() {
+  return (
+    <section id="projects" className="mx-auto max-w-6xl px-6 py-24">
+      <div className="flex items-end justify-between gap-6 mb-12">
+        <div>
+          <div className="font-mono text-xs text-primary mb-3">
+            // featured-work
+          </div>
+          <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight">
+            Selected projects.
+          </h2>
+          <p className="mt-3 text-muted-foreground max-w-2xl">
+            Hand-picked work that shows the breadth across mobile, full stack,
+            computer vision, and AI.
+          </p>
+        </div>
+
+        <a
+          href="/projects"
+          className="hidden sm:inline-flex items-center gap-2 font-mono text-sm text-primary hover:underline whitespace-nowrap"
+        >
+          View All Projects
+          <ArrowUpRight className="size-4" />
+        </a>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        {CASE_STUDIES.map((p) => (
+          <a
+            key={p.slug}
+            href={`/projects/${p.slug}`}
+            className="group relative block p-6 md:p-8 rounded-xl border border-border bg-surface hover:bg-surface-2 transition overflow-hidden"
+          >
+            <div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(circle at 20% 0%, color-mix(in oklab, var(--lime) 12%, transparent), transparent 60%)",
+              }}
+            />
+
+            <div className="relative">
+              <div className="flex items-start justify-between mb-4 gap-4">
+                <div>
+                  <div className="font-mono text-xs text-primary mb-1">
+                    {p.tag}
+                  </div>
+                  <h3 className="font-display text-2xl md:text-3xl font-bold">
+                    {p.name}
+                  </h3>
+                </div>
+
+                <ArrowUpRight className="size-5 text-muted-foreground group-hover:text-primary group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition" />
+              </div>
+
+              <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
+                {p.blurb}
+              </p>
+
+              <div className="flex flex-wrap gap-1.5">
+                {p.stack.slice(0, 5).map((s) => (
+                  <span key={s} className="chip">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <a
+        href="/projects"
+        className="sm:hidden mt-8 inline-flex items-center gap-2 px-5 py-3 rounded-md border border-border hover:bg-surface-2 transition font-medium"
+      >
+        View All Projects
+        <ArrowUpRight className="size-4" />
+      </a>
+    </section>
+  );
+}
+
 function Projects() {
   return (
     <section id="projects" className="mx-auto max-w-6xl px-6 py-24">
-      <SectionHeader
-        kicker="featured-work"
-        title="Selected projects."
-        sub="Hand-picked work that shows the breadth — mobile, full stack, CV and AI."
-      />
+<div className="flex items-end justify-between mb-12">
+  <div>
+    <div className="font-mono text-xs text-primary mb-3">
+      // featured-work
+    </div>
+
+    <h2 className="font-display text-5xl md:text-6xl font-bold tracking-tight">
+      Selected projects.
+    </h2>
+
+    <p className="mt-4 text-muted-foreground max-w-2xl">
+      Hand-picked work that shows the breadth — mobile, full stack, CV and AI.
+    </p>
+  </div>
+
+  <a
+    href="/projects"
+    className="font-mono text-sm text-primary hover:underline whitespace-nowrap mb-2"
+  >
+    View All Projects →
+  </a>
+</div>
 
       <div className="grid md:grid-cols-2 gap-4">
-        {PROJECTS.map((p) => (
+        {CASE_STUDIES.map((p) => (
           <a
             key={p.name}
-            href={p.github || p.kaggle?.[0]}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`/projects/${p.slug}`}
             className="group relative block p-6 md:p-8 rounded-xl border border-border bg-surface hover:bg-surface-2 transition overflow-hidden"
           >
             <div
@@ -675,7 +773,7 @@ function Projects() {
 function Skills() {
   return (
     <section className="mx-auto max-w-6xl px-6 py-24">
-      <SectionHeader kicker="skills" title="Where I&apos;m strongest." />
+      <SectionHeader kicker="strengths" title="Where I&apos;m strongest." />
       <div className="grid md:grid-cols-2 gap-x-10 gap-y-5">
         {SKILLS.map(([name, val]) => (
           <div key={name}>
@@ -717,9 +815,9 @@ function Stats() {
       href: "https://www.codechef.com/users/mythrip737",
     },
   ];
-
   return (
     <section className="mx-auto max-w-6xl px-6 py-12">
+      <SectionHeader kicker="stats" title="" />
       <div className="grid md:grid-cols-3 gap-4">
         {cards.map(({ k, v, sub, icon: Icon, href }) => (
           <a
